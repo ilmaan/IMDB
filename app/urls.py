@@ -13,5 +13,6 @@ urlpatterns = [
     path('showm',views.showm),  
     path('addaajax',views.addaajax,name='addaajax'),
     path('addmajax',views.addmajax,name='addmajax'),
+    path('showmajax',views.showmajax,name='showmajax'),
 
 ]

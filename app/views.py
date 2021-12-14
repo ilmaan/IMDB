@@ -5,22 +5,10 @@ from .forms import *
 from app.models import *
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
-
-def addmovie1(request):
-    if request.method == 'POST':
-        movie_name = request.POST['movie_name']
-        rating = request.POST['rating']
-        cast = request.POST['cast']
-        genre = request.POST['genre']
-
-        adm = Movie(movie_name=movie_name,rating=rating,cast=cast,genre=genre)
-        adm.save()
-
-    else:
-        return render(request,'index.html')    
 
 
 def addmovie(request):  
@@ -38,8 +26,25 @@ def addmovie(request):
     forma = ActorForm()  
 
     actors = Actor.objects.all()  
+    pa = Paginator(actors, 10)  
+    page_number = request.GET.get('page')
+    try:
+        actor_obj = pa.get_page(page_number)  # returns the desired page object
+    except PageNotAnInteger:    
+        actor_obj = pa.page(1)
+    except EmptyPage:
+        actor_obj = pa.page(pa.num_pages)
+        
     movies = Movie.objects.all() 
-    return render(request,'index.html',{'formm':formm,'forma':forma,'actors':actors,'movies':movies})  
+    pm = Paginator(movies,5)  
+    page_number = request.GET.get('page')
+    try:
+        movie_obj = pm.get_page(page_number)  # returns the desired page object
+    except PageNotAnInteger:    
+        movie_obj = pm.page(1)
+    except EmptyPage:
+        movie_obj = pm.page(pm.num_pages)
+    return render(request,'index.html',{'formm':formm,'forma':forma,'actors':actors,'movies':movies,'actor_obj':actor_obj,'movie_obj':movie_obj,})  
 
 
 def addactor(request):  
@@ -100,3 +105,8 @@ def addmajax(request):
     return JsonResponse({"error": ""}, status=400)     
 
     
+def showmajax(request):
+    if request.method == "GET":
+        movies = Movie.objects.all() 
+    return render(request,"show.html",{'movies':movies})      
+        

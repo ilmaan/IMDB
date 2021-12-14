@@ -18,7 +18,7 @@
             {% csrf_token %}
             <!-- {{ form|crispy }} -->
             <table>{{ formm.as_table }}</table>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="submitm" class="btn btn-primary">Submit</button>
           </form>
           <a href="showm">Show All Movies</a>
         
@@ -50,8 +50,8 @@
 
     </tr>  
     </thead>  
-    <tbody>  
-{% for movie in movies %}  
+    <tbody class="movie-list" id="movie-list">  
+{% for movie in movie_obj.object_list %}  
     <tr>  
         <td>{{ movie.movie_name }}</td>  
         <td>{{ movie.rating }}</td>  
@@ -62,6 +62,17 @@
     </tr>  
 {% endfor %}  
     </tbody>  
+
+    <center>
+        {%if movie_obj.has_previous %} {# whether the previous page exists #}
+            <a href="?page={{movie_obj.previous_page_number}}"><</a> {# link to the prev page #}
+        {% endif %}
+        <span>{{movie_obj.number}}</span> {# the current page number #}
+        
+        {%if movie_obj.has_next %} {# whether the next page exists #}
+            <a href="?page={{movie_obj.next_page_number}}">></a> {# link to the next page #}
+        {% endif %}
+    </center>  
 </table>  
 <table class="table table-striped table-bordered table-sm">  
     <thead class="thead-dark">  
@@ -73,23 +84,35 @@
     </tr>  
     </thead>  
     <tbody>  
-        {% for actor in actors %}  
+        {% for actor in actor_obj.object_list %}  
             <tr>  
                 <td>{{ actor.actor_name }}</td>  
                 <td>{{ actor.age }}</td>  
                 <td>{{ actor.lead }}</td>  
                 <!-- <td>{{ actor.movie.all }}</td>   -->
+                <td>
                     {% for m in actor.movie.all %}
-                    <td>{{m}}</td>
+                    {{m}} ,
                     {% endfor %}
                 
+                </td>
             </tr>  
         {% endfor %}  
             </tbody>  
         </table>  
+        <center>
+            {%if actor_obj.has_previous %} {# whether the previous page exists #}
+                <a href="?page={{actor_obj.previous_page_number}}"><</a> {# link to the prev page #}
+            {% endif %}
+            <span>{{actor_obj.number}}</span> {# the current page number #}
+            
+            {%if actor_obj.has_next %} {# whether the next page exists #}
+                <a href="?page={{actor_obj.next_page_number}}">></a> {# link to the next page #}
+            {% endif %}
+        </center>  
 </table>  
 <br>  
-<br>    
+<br>  
 
 
 <script>
@@ -98,7 +121,7 @@ jQuery(document).ready(function($){
 
      $("#actor-form").submit(function (e) {
         // preventing from page reload and default actions
-        e.preventDefault();
+        // e.preventDefault();
         // serialize the data for sending the form data.
         var serializedData = $(this).serialize();
         console.log(serializedData);
@@ -119,7 +142,7 @@ jQuery(document).ready(function($){
 
     $("#movie-form").submit(function (e) {
         // preventing from page reload and default actions
-        e.preventDefault();
+        // e.preventDefault();
         // serialize the data for sending the form data.
         var serializedData = $(this).serialize();
         console.log(serializedData);
@@ -138,8 +161,34 @@ jQuery(document).ready(function($){
         })
     })
 
+
+
+    $("#submitm").submit(function (e) {
+        // preventing from page reload and default actions
+        // e.preventDefault();
+        // serialize the data for sending the form data.
+        // var serializedData = $(this).serialize();
+        // console.log(serializedData);
+        // make POST ajax call
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'showmajax' %}",
+            data: {'serializedData':'data'},
+            success: function (response) {
+                console.log("data showd")
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    })
+
 })
-    
+  
+//   GET
+
+
 </script>
 
 
