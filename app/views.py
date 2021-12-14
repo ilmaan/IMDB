@@ -24,17 +24,22 @@ def addmovie1(request):
 
 
 def addmovie(request):  
-    if request.method == "POST":  
-        form = MovieForm(request.POST)  
-        if form.is_valid():  
-            try:  
-                form.save()  
-                return redirect('/showm')  
-            except:  
-                pass  
-    else:  
-        form = MovieForm()  
-    return render(request,'index.html',{'form':form,'movie':True})  
+    # if request.method == "POST":  
+    #     form = MovieForm(request.POST)  
+    #     if form.is_valid():  
+    #         try:  
+    #             form.save()  
+    #             return redirect('/showm')  
+    #         except:  
+    #             pass  
+    # else:  
+    formm = MovieForm()  
+
+    forma = ActorForm()  
+
+    actors = Actor.objects.all()  
+    movies = Movie.objects.all() 
+    return render(request,'index.html',{'formm':formm,'forma':forma,'actors':actors,'movies':movies})  
 
 
 def addactor(request):  
@@ -48,7 +53,8 @@ def addactor(request):
     #             pass  
     # else:  
     form = ActorForm()  
-    return render(request,'index.html',{'form':form})  
+    actors = Actor.objects.all()  
+    return render(request,'index.html',{'form':form,'actors':actors})  
 
     
 

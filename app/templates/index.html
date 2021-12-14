@@ -7,29 +7,89 @@
 
     <title>Index</title>  
 </head>  
-<body>  
+<body class="container-fluid" >    
 
 {% load crispy_forms_tags %}
 
 
-{% if movie == True %}
+<div class="row">
+    <div class="col-6">
+        <form method="post" class="post-form " id="movie-form" >
+            {% csrf_token %}
+            <!-- {{ form|crispy }} -->
+            <table>{{ formm.as_table }}</table>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <a href="showm">Show All Movies</a>
+        
+    </div>
 
-<form method="post" class="post-form " id="movie-form" >
-    {% csrf_token %}
-    <!-- {{ form|crispy }} -->
-    <table>{{ form.as_table }}</table>
-    <button type="submit">Submit</button>
-  </form>
-  <a href="showm">Show All Movies</a>
-{% else %}
-<form class="post-form" id="actor-form">
-    {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <a href="showa">Show All actors</a>
-{% endif %}
+    <div class="col-6">
+        
+        <form class="post-form" id="actor-form">
+            {% csrf_token %}
+            <table>{{ forma.as_table }}</table>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <a href="showa">Show All actors</a>
 
+    </div>
+</div>
+
+
+<hr>
+
+<table class="table table-striped table-bordered table-sm">  
+    <thead class="thead-dark">  
+    <tr>  
+        <th>Movie Name</th>  
+        <th>rating</th>  
+        <th> cast</th>  
+        <th> genre</th> 
+        <th> release date </th> 
+
+    </tr>  
+    </thead>  
+    <tbody>  
+{% for movie in movies %}  
+    <tr>  
+        <td>{{ movie.movie_name }}</td>  
+        <td>{{ movie.rating }}</td>  
+        <td>{{ movie.cast }}</td>  
+        <td>{{ movie.genre }}</td> 
+        <td>{{ movie.release_data }}</td>  
+        
+    </tr>  
+{% endfor %}  
+    </tbody>  
+</table>  
+<table class="table table-striped table-bordered table-sm">  
+    <thead class="thead-dark">  
+    <tr>  
+        <th>Actor Name</th>  
+        <th>Age</th>  
+        <th>lead</th>  
+        <th>movie</th>  
+    </tr>  
+    </thead>  
+    <tbody>  
+        {% for actor in actors %}  
+            <tr>  
+                <td>{{ actor.actor_name }}</td>  
+                <td>{{ actor.age }}</td>  
+                <td>{{ actor.lead }}</td>  
+                <!-- <td>{{ actor.movie.all }}</td>   -->
+                    {% for m in actor.movie.all %}
+                    <td>{{m}}</td>
+                    {% endfor %}
+                
+            </tr>  
+        {% endfor %}  
+            </tbody>  
+        </table>  
+</table>  
+<br>  
+<br>    
 
 
 <script>
