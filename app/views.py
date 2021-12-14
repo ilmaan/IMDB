@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 import io
 from .forms import *
 from app.models import *
+from django.http import JsonResponse
+from django.core import serializers
 
 # Create your views here.
 
@@ -36,16 +38,16 @@ def addmovie(request):
 
 
 def addactor(request):  
-    if request.method == "POST":  
-        form = ActorForm(request.POST)  
-        if form.is_valid():  
-            try:  
-                form.save()  
-                return redirect('/showa')  
-            except:  
-                pass  
-    else:  
-        form = ActorForm()  
+    # if request.method == "POST":  
+    #     form = ActorForm(request.POST)  
+    #     if form.is_valid():  
+    #         try:  
+    #             form.save()  
+    #             return redirect('/showa')  
+    #         except:  
+    #             pass  
+    # else:  
+    form = ActorForm()  
     return render(request,'index.html',{'form':form})  
 
     
@@ -60,5 +62,35 @@ def showa(request):
     actors = Actor.objects.all()  
     return render(request,"show.html",{'actors':actors})  
 
+
+def addaajax(request):
+    if request.method == "POST":
+        form = ActorForm(request.POST)
+        
+        instance = form.save()
+        # ser_data = serializers.serialize('json',[instance,])
+
+        # return JsonResponse({"instance":instance},status=200)
+        return redirect('/showa')
+        # else:
+        #     return JsonResponse({"error": form.errors}, status=400)  
+
+    return JsonResponse({"error": ""}, status=400)          
+
+
+
+def addmajax(request):
+    if request.method == "POST":
+        form = MovieForm(request.POST)
+        
+        instance = form.save()
+        # ser_data = serializers.serialize('json',[instance,])
+
+        # return JsonResponse({"instance":instance},status=200)
+        return redirect('/showm')
+        # else:
+        #     return JsonResponse({"error": form.errors}, status=400)  
+
+    return JsonResponse({"error": ""}, status=400)     
 
     
