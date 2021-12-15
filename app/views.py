@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
-def addmovie(request):  
+def addmovie(request,mpage=None,apage=None):  
     # if request.method == "POST":  
     #     form = MovieForm(request.POST)  
     #     if form.is_valid():  
@@ -27,7 +27,7 @@ def addmovie(request):
 
     actors = Actor.objects.all()  
     pa = Paginator(actors, 10)  
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page1')
     try:
         actor_obj = pa.get_page(page_number)  # returns the desired page object
     except PageNotAnInteger:    
@@ -36,15 +36,15 @@ def addmovie(request):
         actor_obj = pa.page(pa.num_pages)
         
     movies = Movie.objects.all() 
-    pm = Paginator(movies,5)  
-    page_number = request.GET.get('page')
-    try:
-        movie_obj = pm.get_page(page_number)  # returns the desired page object
-    except PageNotAnInteger:    
-        movie_obj = pm.page(1)
-    except EmptyPage:
-        movie_obj = pm.page(pm.num_pages)
-    return render(request,'index.html',{'formm':formm,'forma':forma,'actors':actors,'movies':movies,'actor_obj':actor_obj,'movie_obj':movie_obj,})  
+    # pm = Paginator(movies,5)  
+    # page_number = request.GET.get('page')
+    # try:
+    #     movie_obj = pm.get_page(page_number)  # returns the desired page object
+    # except PageNotAnInteger:    
+    #     movie_obj = pm.page(1)
+    # except EmptyPage:
+    #     movie_obj = pm.page(pm.num_pages)
+    return render(request,'index.html',{'formm':formm,'forma':forma,'actors':actors,'movies':movies,'actor_obj':actor_obj,})  
 
 
 def addactor(request):  

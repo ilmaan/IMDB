@@ -7,7 +7,7 @@ from .models import *
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['movie_name','rating']
+    list_display = ['movie_name','rating','cast','genre','release_data']
 
 
 
