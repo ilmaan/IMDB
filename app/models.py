@@ -76,7 +76,14 @@ class Emplo(models.Model):
     emp_id = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
 
-    def create(self,*args,**kwargs):
-        self.emp_id = 'I-HONOIDA' + str(self.id)
-        super().create(*args,**kwargs)
+    # def create(self,*args,**kwargs):
+    #     self.emp_id = 'I-HONOIDA' + str(self.id)
+    #     super(Emplo,self).create(*args,**kwargs)
+
+    def save(self, *args, **kwargs): 
+        super().save(*args, **kwargs)  
+        if not 'I-HONOIDA' in self.emp_id:  
+            self.emp_id = 'I-HONOIDA'+self.emp_id
+            super().save(*args, **kwargs)
+
 
