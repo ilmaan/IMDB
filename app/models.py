@@ -51,3 +51,32 @@ class idbm(models.Model):
 
     # def __str__(self):
     #     return self.movie_title
+
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.question_text
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return "Choice: {}, Question:{}".format(self.choice_text, self.question.question_text)
+
+class MyManager(models.Manager):
+    pass
+
+class Emplo(models.Model):
+    emp_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+
+    def create(self,*args,**kwargs):
+        self.emp_id = 'I-HONOIDA' + str(self.id)
+        super().create(*args,**kwargs)
+

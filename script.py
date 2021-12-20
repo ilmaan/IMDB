@@ -11,7 +11,7 @@ django.setup()
 from app.models import *
 
 
-for i in range(10000):
+for i in range(5000):
     movie_name = ('Sample-movie'+str(i))
     rating = i
     casts = i*10

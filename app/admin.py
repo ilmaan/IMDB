@@ -23,3 +23,12 @@ class muvAdmin(admin.ModelAdmin):
 @admin.register(idbm)
 class idbmAdmin(admin.ModelAdmin):
     list_display = ['movie_title']
+
+
+admin.site.register(Question)
+
+
+admin.site.register(Choice)
+
+
+admin.site.register(Emplo)
